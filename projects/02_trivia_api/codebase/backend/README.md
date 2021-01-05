@@ -72,9 +72,12 @@ This README is missing documentation of your endpoints. Below is an example for 
 
 Endpoints
 GET '/categories'
-GET ...
-POST ...
-DELETE ...
+GET '/questions'
+DELETE '/questions/<question_id>
+POST '/questions/new'
+POST '/questions/search'
+GET '/categories/<category_id>/questions'
+POST '/quizzes'
 
 GET '/categories'
 - Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
@@ -87,6 +90,49 @@ GET '/categories'
 '5' : "Entertainment",
 '6' : "Sports"}
 
+GET '/questions'
+- Fetches a list of questions of the current category
+- Request Arguments: page number, category id
+- Returns: An object with four keys: questions, which contains a list of question objects. 
+                                     total_questions, which refers to an integer value indicating the total number of questions.
+                                     categories, which contains a list of category objects.
+                                     current_category, which refers to an integer value indicating the id of the selected category of questions.
+                                     
+DELETE '/questions/<question_id>/
+- Deletes a question that has an id equal to question_id
+- Request Arguments: None
+- Returns: An object of success: True key:value pair if the operation was successful
+
+POST '/questions/new'
+- Creates a new question
+- Request Arguments: None
+- Request Body: An object with four keys: question, which refers to a string value of the question's statement.
+                                          answer, which refers to a string value of the question's answer.
+                                          category, which refers to an integer value indicating the category of the question.
+                                          difficulty, which refers to an integer value indicating the difficulty of the question.
+- Returns: An object of success: True key:value pair if the operation was successful
+
+POST '/questions/search'
+- Fetches a list of questions containing the search term
+- Request Arguments: None
+- Request Body: An object with a single key, searchTerm, that refers to a string value of the search term
+- Returns: An object with three keys: questions, which contains a lit of question object that match the search term.
+                                      total_questions, which referes to an integer value indicating the total number of questions matching the search term
+                                      current_category, which refers to an integer value indicating the id of the selected category of questions.
+
+GET '/categories/<category_id>/questions'
+- Fetches a list of questions in the specified category
+- Request Arguments: None
+- Returns: An object with three keys: questions, which contains a lit of question object in the specified category.
+                                      total_questions, which referes to an integer value indicating the total number of questions in the specified category.
+                                      current_category, which refers to an integer value indicating the id of the selected category of questions.
+
+POST '/quizzes'
+- Submits the answer for the shown question, and Fetches a new question
+- Request Arguments: None
+- Request Body: An object with two keys: quiz_category, which refers to an integer value indicating the id of the category.
+                                         previous_questions, which refers to list of the previous questions' ids.
+- Returns: An object with a single key, question, which refers to a the next question object
 ```
 
 

@@ -9,6 +9,7 @@ os.sys.path.append('..')
 from models import setup_db, Question, Category
 
 QUESTIONS_PER_PAGE = 10
+ALL_CATEGORIES = 0
 
 def create_app(test_config=None):
   # create and configure the app
@@ -37,10 +38,10 @@ def create_app(test_config=None):
   @app.route('/questions', methods=['GET'])
   def get_paginated_questions():
     page = request.args.get('page', 1, type=int)
-    current_category = request.args.get('category', 0, type=int)
+    current_category = request.args.get('category', ALL_CATEGORIES, type=int)
     start = (page - 1) * QUESTIONS_PER_PAGE
     end = start + QUESTIONS_PER_PAGE
-    if(current_category == 0) : questions = Question.query.all()
+    if(current_category == ALL_CATEGORIES) : questions = Question.query.all()
     else :  questions = Question.query.filter(Question.category == current_category).all()
     categories = Category.query.all()
     formatted_questions = [question.format() for question in questions]
@@ -77,14 +78,14 @@ def create_app(test_config=None):
       abort(422)
 
 
-  @app.route('/questions', methods=['POST'])
+  @app.route('/questions/search', methods=['POST'])
   def get_question_with_search():
     search_term = request.json['searchTerm']
     questions = Question.query.filter(Question.question.ilike('%' + search_term + '%')).all()
     formatted_questions = [question.format() for question in questions]
     return jsonify({'questions': formatted_questions,
                     'total_questions': len(formatted_questions),
-                    'current_category': 0})
+                    'current_category': ALL_CATEGORIES})
 
 
   @app.route('/categories/<category_id>/questions', methods=['GET'])
@@ -103,7 +104,7 @@ def create_app(test_config=None):
     data = request.json
     category = data['quiz_category']
     previous_questions = data['previous_questions']
-    if(category['id'] == 0) :
+    if(category['id'] == ALL_CATEGORIES) :
       category_questions = Question.query.all()
     else : 
       category_questions = Question.query.filter(Question.category == category['id']).all()
