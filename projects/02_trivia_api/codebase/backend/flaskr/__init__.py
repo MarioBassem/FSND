@@ -42,7 +42,7 @@ def create_app(test_config=None):
     start = (page - 1) * QUESTIONS_PER_PAGE
     end = start + QUESTIONS_PER_PAGE
     if(current_category == ALL_CATEGORIES) : questions = Question.query.all()
-    else :  questions = Question.query.filter(Question.category == current_category).all()
+    else :  questions = Question.query.filter(Question.category == str(current_category)).all()
     categories = Category.query.all()
     formatted_questions = [question.format() for question in questions]
     formatted_categories = {}
@@ -90,7 +90,7 @@ def create_app(test_config=None):
 
   @app.route('/categories/<category_id>/questions', methods=['GET'])
   def get_question_with_category(category_id):
-    questions = Question.query.filter(Question.category == category_id).all()
+    questions = Question.query.filter(Question.category == str(category_id)).all()
     if len(questions) == 0 :
       abort(404)
     formatted_questions = [question.format() for question in questions]
@@ -107,7 +107,7 @@ def create_app(test_config=None):
     if(category['id'] == ALL_CATEGORIES) :
       category_questions = Question.query.all()
     else : 
-      category_questions = Question.query.filter(Question.category == category['id']).all()
+      category_questions = Question.query.filter(Question.category == str(category['id'])).all()
 
     if len(category_questions) == 0 : 
       abort(404)
